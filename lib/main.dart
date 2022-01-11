@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share/share.dart';
 
@@ -48,6 +51,9 @@ class _MyAppState extends State<MyApp> {
 
   void _takeScreenshot() async {
     final imageFile = await _screenshotController.capture();
-    Share.shareFiles([imageFile.path], text: "Shared from #SexyFlutterApp");
+    final tempDir = await getTemporaryDirectory();
+    File file = await File('${tempDir.path}/image.png').create();
+    file.writeAsBytesSync(imageFile!);
+    Share.shareFiles([file.path], text: "My Location");
   }
 }
